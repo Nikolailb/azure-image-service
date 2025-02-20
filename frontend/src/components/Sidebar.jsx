@@ -28,7 +28,6 @@ function Sidebar({ image, setImage }) {
   };
 
   const getImage = (img) => {
-    console.log(img);
     fetch(ApiUrl + "/images/" + img)
       .then((response) => {
         if (!response.ok) {

@@ -1,0 +1,23 @@
+services:
+  backend:
+    extends:
+      file: ./backend/docker-compose.yml
+      service: image-service-api
+
+  storage:
+    extends:
+      file: ./backend/docker-compose.yml
+      service: image-service-storage
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: "https://localhost:5501"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+volumes:
+  image-service-data:
