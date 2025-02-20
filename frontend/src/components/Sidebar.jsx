@@ -1,36 +1,60 @@
+import { useEffect, useState } from "react";
+import { defaultImage } from "../App";
+import UploadImage from "./UploadImage";
+import ImageList from "./ImageList";
+
 /* eslint-disable react/prop-types */
-function Sidebar({
-  message,
-  handleFileChange,
-  handleUpload,
-  images,
-  getImage,
-}) {
+function Sidebar({ image, setImage }) {
+  const [message, setMessage] = useState("");
+  const [images, setImages] = useState([]);
+
+  const getImages = () => {
+    fetch("http://localhost:5500/images")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch images");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setImages(data);
+        if (data.length > 0 && image === defaultImage) {
+          getImage(data[0]);
+        }
+      })
+      .catch((error) => {
+        setMessage("Error fetching images", error);
+      });
+  };
+
+  const getImage = (img) => {
+    console.log(img);
+    fetch("http://localhost:5500/images/" + img)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch images");
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const imageUrl = URL.createObjectURL(blob);
+        setImage(imageUrl);
+      })
+      .catch((error) => {
+        setMessage("Error fetching image", error);
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    getImages();
+  }, []);
+
   return (
     <aside className="menu">
       {message ?? <div className="box">{message}</div>}
-      <div className="box">
-        <input
-          type="file"
-          accept="image/png, image/jpeg"
-          onChange={handleFileChange}
-        />
-        <button onClick={handleUpload}>Upload</button>
-      </div>
-      {images && (
-        <div className="box">
-          <h4>Images</h4>
-          <ul className="image-list">
-            {images.map((image) => (
-              <li key={image}>
-                <a href="#" onClick={() => getImage(image)}>
-                  {image}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <UploadImage setMessage={setMessage} getImages={getImages} />
+      {images && <ImageList images={images} getImage={getImage} />}
     </aside>
   );
 }
