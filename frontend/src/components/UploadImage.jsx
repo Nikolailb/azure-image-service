@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
+import { ApiUrl } from "../const";
 
 function UploadImage({ setMessage, getImages }) {
   const [file, setFile] = useState(null);
@@ -28,7 +29,7 @@ function UploadImage({ setMessage, getImages }) {
     const formData = new FormData();
     formData.append("file", file);
 
-    fetch("http://localhost:5500/images", {
+    fetch(ApiUrl + "/images", {
       method: "POST",
       body: formData,
     })

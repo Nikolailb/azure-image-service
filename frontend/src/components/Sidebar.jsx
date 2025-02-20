@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { defaultImage } from "../App";
 import UploadImage from "./UploadImage";
 import ImageList from "./ImageList";
+import { ApiUrl, DefaultImage } from "../const";
 
 /* eslint-disable react/prop-types */
 function Sidebar({ image, setImage }) {
@@ -9,7 +9,7 @@ function Sidebar({ image, setImage }) {
   const [images, setImages] = useState([]);
 
   const getImages = () => {
-    fetch("http://localhost:5500/images")
+    fetch(ApiUrl + "/images")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch images");
@@ -18,7 +18,7 @@ function Sidebar({ image, setImage }) {
       })
       .then((data) => {
         setImages(data);
-        if (data.length > 0 && image === defaultImage) {
+        if (data.length > 0 && image === DefaultImage) {
           getImage(data[0]);
         }
       })
@@ -29,7 +29,7 @@ function Sidebar({ image, setImage }) {
 
   const getImage = (img) => {
     console.log(img);
-    fetch("http://localhost:5500/images/" + img)
+    fetch(ApiUrl + "/images/" + img)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch images");

@@ -19,15 +19,13 @@ services:
       - "11000:10000"
       - "11001:10001"
       - "11002:10002"
-    command: "azurite --loose --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0"
-    environment:
-      AZURITE_USE_DEFAULT_STORAGE_LOCATION: "true"
+    command: "azurite --loose --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 -l data"
     volumes:
-      - azurite_data:/data
+      - image-service-data:/opt/azurite/data
     healthcheck:
       test: ["CMD-SHELL", "nc -z 127.0.0.1 10000 || exit 1"]
       interval: 1s
       retries: 30
 
 volumes:
-  azurite_data:
+  image-service-data:

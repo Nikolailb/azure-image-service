@@ -2,11 +2,10 @@ import { useState } from "react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import Main from "./components/Main";
-
-export const defaultImage = "https://placehold.co/600x400";
+import { DefaultImage } from "./const";
 
 function App() {
-  const [image, setImage] = useState(defaultImage);
+  const [image, setImage] = useState(DefaultImage);
 
   return (
     <>
