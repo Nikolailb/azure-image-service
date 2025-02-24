@@ -4,7 +4,7 @@ services:
       file: ./backend/docker-compose.yml
       service: image-service-api
 
-  storage:
+  image-service-storage:
     extends:
       file: ./backend/docker-compose.yml
       service: image-service-storage
