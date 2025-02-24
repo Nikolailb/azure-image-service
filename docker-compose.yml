@@ -1,24 +1,33 @@
 services:
   image-service-api:
+    container_name: image-service-api
     extends:
       file: ./backend/docker-compose.yml
       service: image-service-api
+    networks:
+      - image-service-network
 
   image-service-storage:
+    container_name: image-service-storage
     extends:
       file: ./backend/docker-compose.yml
       service: image-service-storage
+    networks:
+      - image-service-network
 
   frontend:
+    container_name: image-service-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: "https://localhost:5501"
+        VITE_API_URL: "http://4.235.105.178/api"
     ports:
       - "5173:5173"
     depends_on:
       - image-service-api  
+    networks:
+      - image-service-network
   nginx:
     image: nginx:latest
     container_name: nginx-proxy
@@ -30,5 +39,10 @@ services:
     depends_on:
       - frontend
       - image-service-api
+    networks:
+      - image-service-network
 volumes:
   image-service-data:
+networks:
+  image-service-network:
+    driver: bridge

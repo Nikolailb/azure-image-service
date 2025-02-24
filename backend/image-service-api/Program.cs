@@ -6,6 +6,11 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging();
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080); // Bind to all interfaces inside the container
+    options.ListenAnyIP(8081);
+});
 
 // Services
 builder.Services.AddOpenApi();
