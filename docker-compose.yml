@@ -1,5 +1,5 @@
 services:
-  backend:
+  image-service-api:
     extends:
       file: ./backend/docker-compose.yml
       service: image-service-api
